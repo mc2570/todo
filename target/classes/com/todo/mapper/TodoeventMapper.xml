@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.todo.mapper.TodoeventMapper" >
+
+  <resultMap id="TodoMap" type="com.todo.model.Todoevent">
+    <id column="seq" property="seq"></id>
+    <result column="user_id" property="userId"></result>
+    <result column="event_id" property="eventId"></result>
+    <result column="level"  property="level"/>
+    <result column="status" property="status"/>
+    <result column="create_dttm" property="createDttm" />
+    <result column="content"  property="content" />
+  </resultMap>
+
+  <select id="selectAllEventid" resultMap="TodoMap">
+    SELECT seq,event_id,level,status,create_dttm,content FROM todo_event
+  </select>
+
+  <select id="selectByEventid" parameterType="java.lang.String" resultMap="TodoMap">
+    SELECT seq,event_id,level,status,create_dttm,content FROM todo_event
+    <where>
+      <if test="eventid!=null and eventid!=''">
+        and event_id=#{eventid}
+      </if>
+    </where>
+  </select>
+    
+    <select id="selectBySeq" resultType="com.todo.model.Todoevent" parameterType="java.lang.Integer">
+        SELECT seq,event_id,level,status,create_dttm,content FROM todo_event WHERE seq=#{seq}
+    </select>
+
+    <update id="updateBySeq" parameterType="com.todo.model.Todoevent">
+        UPDATE todo_event set event_id=#{todoevent.eventId},content=#{todoevent.content},level=#{todoevent.level} WHERE seq=#{todoevent.seq}
+    </update>
+
+    <delete id="deleteBySeq" parameterType="java.lang.Integer">
+        DELETE FROM todo_event WHERE seq=#{seq}
+    </delete>
+
+    <insert id="addTodoEvent" parameterType="com.todo.model.Todoevent">
+        INSERT INTO todo_event(event_id,level,status,create_dttm,content)
+        VALUES (#{todoevent.eventId},#{todoevent.level},#{todoevent.status},#{todoevent.createDttm},#{todoevent.content})
+    </insert>
+</mapper>
